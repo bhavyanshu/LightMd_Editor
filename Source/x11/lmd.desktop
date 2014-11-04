@@ -1,0 +1,11 @@
+[Desktop Entry]
+Exec=LightMdEditor
+Name=LightMdEditor
+Icon=lmd
+Type=Application
+Categories=TextEditor;WordProcessor
+Comment=A light weight Markdown Editor
+Exec=/usr/bin/LightMdEditor %F
+MimeType=text/x-markdown;
+Terminal=false
+X-KDE-StartupNotify=false

@@ -1,0 +1,53 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/checkbox.png</file>
+        <file alias="down_arrow.png">images/down_arrow.png</file>
+        <file>images/handle.png</file>
+        <file>images/chat_bubble_message_square_icon&amp;24.png</file>
+        <file>images/code_brackets_icon&amp;24.png</file>
+        <file>images/clipboard_past_icon&amp;24.png</file>
+        <file>images/clipboard_copy_icon&amp;24.png</file>
+        <file>images/clipboard_cut_icon&amp;24.png</file>
+        <file>images/doc_edit_icon&amp;24.png</file>
+        <file>images/eye_icon&amp;24.png</file>
+        <file>images/doc_plus_icon&amp;24.png</file>
+        <file>images/font_strokethrough_icon&amp;24.png</file>
+        <file>images/font_italic_icon&amp;24.png</file>
+        <file>images/font_bold_icon&amp;24.png</file>
+        <file>images/link_icon&amp;24.png</file>
+        <file>images/list_bullets_icon&amp;24.png</file>
+        <file>images/picture_icon&amp;24.png</file>
+        <file>images/list_num_icon&amp;24.png</file>
+        <file>images/save_icon&amp;24.png</file>
+        <file>images/menu_expand_32.png</file>
+        <file>images/Vsepartoolbar.png</file>
+        <file>images/Vmovetoolbar.png</file>
+        <file>images/up_arrow_disabled.png</file>
+        <file>images/up_arrow.png</file>
+        <file>images/undock.png</file>
+        <file>images/transparent.png</file>
+        <file>images/stylesheet-vline.png</file>
+        <file>images/stylesheet-branch-more.png</file>
+        <file>images/stylesheet-branch-end.png</file>
+        <file>images/sizegrip.png</file>
+        <file>images/right_arrow_disabled.png</file>
+        <file>images/right_arrow.png</file>
+        <file>images/left_arrow_disabled.png</file>
+        <file>images/left_arrow.png</file>
+        <file>images/Hsepartoolbar.png</file>
+        <file>images/Hmovetoolbar.png</file>
+        <file>images/branch_open-on.png</file>
+        <file>images/branch_open.png</file>
+        <file>images/branch_closed-on.png</file>
+        <file>images/branch_closed.png</file>
+        <file>images/down_arrow_disabled.png</file>
+        <file>images/close.png</file>
+        <file>images/font_size_icon&amp;24.png</file>
+        <file>images/magic_wand_icon&amp;24.png</file>
+        <file>images/magic_wand_2_icon&amp;24.png</file>
+        <file>images/table.png</file>
+    </qresource>
+    <qresource prefix="/docs">
+        <file>help.html</file>
+    </qresource>
+</RCC>

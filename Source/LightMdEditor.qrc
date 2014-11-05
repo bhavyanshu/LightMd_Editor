@@ -47,7 +47,4 @@
         <file>images/magic_wand_2_icon&amp;24.png</file>
         <file>images/table.png</file>
     </qresource>
-    <qresource prefix="/docs">
-        <file>help.html</file>
-    </qresource>
 </RCC>

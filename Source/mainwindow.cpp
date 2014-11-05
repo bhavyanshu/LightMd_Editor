@@ -611,7 +611,7 @@ void MainWindow::on_actionContact_triggered()
     msgBox.setWindowTitle("Contact Developer");
     msgBox.setTextFormat(Qt::RichText);
     msgBox.setText("<p style=\"color:#FFFFFF\">"+QApplication::applicationName()
-                   + " Version " + QApplication::applicationVersion()+"<br>Developer : Bhavyanshu Parasher<br> Email : <a style=\"color:#5C67FF\" href=\"mailto:ask@bhavyanshu.me\">ask@bhavyanshu.me</a><br>Website : <a style=\"color:#5C67FF\" href=\"https://bhavyanshu.me\">https://bhavyanshu.me</a></p>");
+                   + " Version " + QApplication::applicationVersion()+"<br>Developer : Bhavyanshu Parasher<br> Email : <a style=\"color:#5C67FF\" href=\"mailto:ask@bhavyanshu.me\">ask@bhavyanshu.me</a><br>Website : <a style=\"color:#5C67FF\" href=\"https://bhavyanshu.me\">https://bhavyanshu.me</a><br> Project Webpage : <a style=\"color:#5C67FF\" href=\"https://github.com/bhavyanshu/LightMd_Editor\">https://github.com/bhavyanshu/LightMd_Editor</a></p>");
     msgBox.exec();
 }
 

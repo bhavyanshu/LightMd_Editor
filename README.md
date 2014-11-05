@@ -13,7 +13,7 @@ Dated : 04-11-2014
 * Customizable for comfort
 * Focus Mode and Full Screen Mode for distraction free typing
 
-View [changelog]() for more details.
+View [changelog](https://github.com/bhavyanshu/LightMd_Editor/blob/master/ChangLog.md) for more details.
 
 To know what more features will be added, view [this](https://github.com/bhavyanshu/LightMd_Editor/labels/enhancement). You can also post a feature request here.
 

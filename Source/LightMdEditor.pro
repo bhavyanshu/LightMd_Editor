@@ -11,7 +11,7 @@
 # If not, see http://www.gnu.org/licenses/.
 #-------------------------------------------------
 
-QT       += core gui webkitwidgets
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

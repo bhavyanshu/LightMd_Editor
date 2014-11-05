@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>LightMd - Mardown Editor</string>
+   <string>LightMd - Markdown Editor</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QMenuBar

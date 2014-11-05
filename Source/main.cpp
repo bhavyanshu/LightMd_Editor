@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     a.setOrganizationName("Bhavyanshu Parasher");
     a.setOrganizationDomain("https://bhavyanshu.me");
     a.setApplicationName("LightMd Editor");
-    a.setApplicationVersion("0.1");
+    a.setApplicationVersion("1.0.0-beta");
     MainWindow w;
     w.readSettings();
     w.showMaximized();

@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QStringList args = a.arguments();
-    a.setWindowIcon(QIcon("app.ico"));
+    a.setWindowIcon(QIcon("lightmdeditor.ico"));
     a.setOrganizationName("Bhavyanshu Parasher");
     a.setOrganizationDomain("https://bhavyanshu.me");
     a.setApplicationName("LightMd Editor");

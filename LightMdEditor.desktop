@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=LightMdEditor
+Exec=/usr/bin/LightMdEditor %F
+Comment=Markdown Editor
+Icon=/usr/share/pixmaps/lightmdeditor.ico
+StartupNotify=false
+Encoding=UTF-8
+Categories=TextEditor;WordProcessor;Development;GTK;GNOME;

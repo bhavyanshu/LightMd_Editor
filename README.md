@@ -1,14 +1,14 @@
 #LightMd Markdown Editor
 
-LightMd Markdown Editor is a free and open source editor for Markdown with a lot of features. It has been tested on Linux as well as Windows. In near future, support for Mac OS will be added. 
+LightMd Markdown Editor is a free and open source editor for Markdown with lot of features. It has been tested on Linux as well as Windows. In near future, support for Mac OS will be added. 
 
-####Current Version 
-Version Number : [1.0.0-beta](https://github.com/bhavyanshu/LightMd_Editor/releases/tag/v1.0.0-beta)
+#### Current Version 
+Version Number : 1.0.0
 Dated : 04-11-2014
 
 #### Download & Install
 
-View the [releases](https://github.com/bhavyanshu/LightMd_Editor/releases) for more information on how to install.
+View the [releases](https://github.com/bhavyanshu/LightMd_Editor/releases) for information on how to install.
 
 ##Features in current version
 
@@ -17,7 +17,7 @@ View the [releases](https://github.com/bhavyanshu/LightMd_Editor/releases) for m
 * Customizable for comfort
 * Focus Mode and Full Screen Mode for distraction free typing
 
-View [changelog](https://github.com/bhavyanshu/LightMd_Editor/blob/master/ChangLog.md) for more details.
+View [changelog](https://github.com/bhavyanshu/LightMd_Editor/blob/master/debian/changelog) for more details.
 
 To know what more features will be added, view [this](https://github.com/bhavyanshu/LightMd_Editor/labels/enhancement). You can also post a feature request here.
 
@@ -38,8 +38,16 @@ This application is under GNU GPLv3. Please read the COPYING.txt file for furthe
 
 ##Contribute
 
-To contribute, simply fork, clone locally, patch and send pull request.
-I have built it using Qt Creator. The source code is written in C++ and Qt. The Source directory has LightMdEditor.pro file so you can directly open project into Qt Creator.
+To contribute, simply fork, clone, patch and send pull request.
+I have built it using Qt Creator. The source code is written in C++ and Qt5. So either use Qt Creator to build the project or follow the instructions given below.
+
+Use the following commands to build. Make sure you have g++, gcc and Qt5 libraries. 
+
+    cd ./src
+    qmake
+    make -f Makefile
+
+This will build the application if you have all the build dependencies. Come outside the src folder, you will see build & bin folder. In the bin folder, there is an executable file for the main application.
 
 Contact me at bhavyanshu@codershangout.org or visit https://bhavyanshu.me
 

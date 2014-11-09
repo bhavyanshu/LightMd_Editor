@@ -1,4 +1,0 @@
-?package(lightmdeditor):needs="x11" \
-	section="Applications/Editors" \
-	title="LightMdEditor" \
-	command="/usr/bin/LightMdEditor"

@@ -15,7 +15,7 @@ namespace Ui {
     class FindReplaceForm;
 }
 
-class QTextEdit;
+class QPlainTextEdit;
 class QSettings;
 
 /**
@@ -57,7 +57,7 @@ public:
       * Associates the text editor where to perform the search
       * @param textEdit_
       */
-    void setTextEdit(QTextEdit *textEdit_);
+    void setTextEdit(QPlainTextEdit *textEdit_);
 
     /// hides replace widgets from the form
     void hideReplaceWidgets();
@@ -135,7 +135,7 @@ protected:
     QTextCursor textCursor;
 
     /// the text editor (possibly) associated with this form
-    QTextEdit *textEdit;
+    QPlainTextEdit *textEdit;
 };
 
 #endif // FINDREPLACEFORM_H

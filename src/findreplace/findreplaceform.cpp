@@ -4,7 +4,7 @@
  */
 
 #include <QtGui>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QRegExp>
 #include <QSettings>
 
@@ -51,7 +51,7 @@ void FindReplaceForm::hideReplaceWidgets() {
     ui->replaceAllButton->setVisible(false);
 }
 
-void FindReplaceForm::setTextEdit(QTextEdit *textEdit_) {
+void FindReplaceForm::setTextEdit(QPlainTextEdit *textEdit_) {
     textEdit = textEdit_;
     connect(textEdit, SIGNAL(copyAvailable(bool)), ui->replaceButton, SLOT(setEnabled(bool)));
     connect(textEdit, SIGNAL(copyAvailable(bool)), ui->replaceAllButton, SLOT(setEnabled(bool)));

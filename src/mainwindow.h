@@ -38,7 +38,10 @@ public:
     void on_noarg();
 
     void readSettings();
+    QString themeSettings();
+    void on_switchTheme(const QString &themeName);
 
+    QString themeSettingsSave;
 
 private slots:
     void on_actionBold_triggered();
@@ -89,6 +92,8 @@ private slots:
 
     void highlightCurrentLine();
 
+    void on_actionTheme_Toggle_triggered();
+
 private:
     void closeEvent(QCloseEvent *eve);
     void keyPressEvent(QKeyEvent *e);
@@ -103,14 +108,14 @@ private:
     bool warnSave();
     void writeSettings();
 
-
     QString fontFamily;
     int fontSize;
     bool fontIsBold;
     bool fontIsItalic;
+    bool themeState;
     FindDialog *m_findDialog;
     FindReplaceDialog *m_findReplaceDialog;
-    MkdSyntax *highlighter;
+    HGMarkdownHighlighter *highlighter;
 
     Ui::MainWindow *ui;
 };

@@ -15,18 +15,35 @@
 #include <QApplication>
 #include <QSettings>
 #include <QIcon>
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QStringList args = a.arguments();
-    a.setWindowIcon(QIcon("lightmdeditor.ico"));
+    a.setWindowIcon(QIcon(":/lightmdeditor.ico"));
     a.setOrganizationName("Bhavyanshu Parasher");
     a.setOrganizationDomain("https://bhavyanshu.me");
     a.setApplicationName("LightMd Editor");
-    a.setApplicationVersion("1.0.0-beta");
+    a.setApplicationVersion("1.0.1");
     MainWindow w;
     w.readSettings();
+    QString theme;
+    theme = w.themeSettings();
+    QFile styleFile;
+    if(theme.isEmpty()) {
+        styleFile.setFileName(":/styles/dark.qss"); //If app is run the first time
+    }
+    else {
+        styleFile.setFileName(":/styles/"+theme+".qss"); //Get theme name from last save settings
+        w.on_switchTheme(theme);
+    }
+
+    styleFile.open(QFile::ReadOnly);
+    QString style(styleFile.readAll());
+    styleFile.close();
+    w.setStyleSheet(style);
+
     w.showMaximized();
     w.show();
     if (args.count() > 1) { //Opening a file

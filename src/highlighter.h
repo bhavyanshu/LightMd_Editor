@@ -1,21 +1,10 @@
-/**
- * Copyright 2014 Bhavyanshu Parasher
- * This file is part of "LightMd Editor".
- * "LightMd Editor" is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * "LightMd Editor" is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along with "LightMd Editor".
- * If not, see http://www.gnu.org/licenses/.
- */
-
 #ifndef HIGHLIGHTER_H
 #define HIGHLIGHTER_H
 
-#include <QTextCharFormat>
-#include <QThread>
+#include <QtGui/QTextCharFormat>
+#include <QtCore/QThread>
+#include <QtCore/QPair>
+#include <QPlainTextEdit>
 
 extern "C" {
 #include "pmh_parser.h"
@@ -30,7 +19,7 @@ class WorkerThread : public QThread
 public:
     ~WorkerThread();
     void run();
-    char *content;
+    QString content;
     pmh_element **result;
 };
 
@@ -41,16 +30,37 @@ struct HighlightingStyle
 };
 
 
-class MkdSyntax : public QObject
+class HGMarkdownHighlighter : public QObject
 {
     Q_OBJECT
 
 public:
-    MkdSyntax(QTextDocument *parent = 0, int aWaitInterval = 2000);
+    HGMarkdownHighlighter(QTextDocument *parent = 0, double aWaitInterval = 1);
+    ~HGMarkdownHighlighter();
+    QColor currentLineHighlightColor;
+    QList<QPair<int, QString> > *styleParsingErrorList;
+
+    void highlightNow();
+    void parseAndHighlightNow();
+
     void setStyles(QVector<HighlightingStyle> &styles);
-    int waitInterval;
+    bool getStylesFromStylesheet(QString filePath, QPlainTextEdit *editor);
+
+    double waitInterval();
+    void setWaitInterval(double value);
+    bool makeLinksClickable();
+    void setMakeLinksClickable(bool value);
+
+    void handleStyleParsingError(char *error_message, int line_number);
+
+    static QString availableFontFamilyFromPreferenceList(QString familyList);
+
+signals:
+    void styleParsingErrors(QList<QPair<int, QString> > *errors);
 
 protected:
+    void beginListeningForContentChanged();
+    void stopListeningForContentChanged();
 
 private slots:
     void handleContentsChange(int position, int charsRemoved, int charsAdded);
@@ -58,18 +68,21 @@ private slots:
     void timerTimeout();
 
 private:
-    WorkerThread *childThread;
-
-    bool parsePending;
-    pmh_element **cached_elements;
-    QVector<HighlightingStyle> *syntaxStyle;
+    bool _makeLinksClickable;
+    int _waitIntervalMilliseconds;
     QTimer *timer;
     QTextDocument *document;
+    WorkerThread *workerThread;
+    bool parsePending;
+    pmh_element **cached_elements;
+    QVector<HighlightingStyle> *highlightingStyles;
+    QString cachedContent;
 
     void clearFormatting();
     void highlight();
     void parse();
     void setDefaultStyles();
+
 };
 
 #endif

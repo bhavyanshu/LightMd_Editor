@@ -15,6 +15,7 @@
 #include "ui_mainwindow.h"
 #include "tabledialog.h"
 #include "pmh_parser.h"
+#include "pmh_styleparser.h"
 
 #include "findreplace/findreplacedialog.h"
 #include <QFileDialog>
@@ -37,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->actionWordWrap->setChecked(true);
+
     connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseTab(int)));
     statusBar()->showMessage(tr("Ready"), 2000);
 }
@@ -49,7 +51,7 @@ MainWindow::~MainWindow()
 void MainWindow::writeSettings() {
 
     QSettings settings("LightMdEditor","LightMd");
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
 
     if(te){
         QFont font = te->font();
@@ -57,7 +59,8 @@ void MainWindow::writeSettings() {
         settings.setValue("font.size", font.pointSize());
         settings.setValue("font.bold", font.bold());
         settings.setValue("font.italic", font.italic());
-        //settings.setValue("font", font().toString());
+        settings.setValue("theme.style", themeSettingsSave);
+        settings.setValue("theme.state", themeState);
     }
 }
 
@@ -71,13 +74,20 @@ void MainWindow::readSettings() {
 }
 
 
+QString MainWindow::themeSettings() {
+    QSettings settings("LightMdEditor","LightMd");
+    themeSettingsSave = settings.value("theme.style").toString();
+    themeState = settings.value("theme.state", false).toBool();
+    return themeSettingsSave;
+}
+
 void MainWindow::closeEvent(QCloseEvent *eve)
 {
     writeSettings();
     for(int i = 0; i< ui->tabWidget->count(); i++ )
     {
         qDebug() << ui->tabWidget->widget(i);
-        QTextEdit* edit = qobject_cast<QTextEdit*>(ui->tabWidget->widget(i));
+        QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(ui->tabWidget->widget(i));
         if(edit) {
             //edit->setText("new");
             QString filname = ui->tabWidget->tabText(i);
@@ -117,7 +127,7 @@ void MainWindow::closeEvent(QCloseEvent *eve)
  */
 void MainWindow::slotCloseTab(int index)
 {
-    QTextEdit* edit = qobject_cast<QTextEdit*>(ui->tabWidget->widget(index));
+    QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(ui->tabWidget->widget(index));
     if(edit) {
         if(warnSave()==true){           //Before closing tab check if document is modified, if yes then ask to save.
             this->ui->tabWidget->removeTab(index);
@@ -131,7 +141,7 @@ void MainWindow::slotCloseTab(int index)
  */
 void MainWindow::rollBackTab()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     if(te){
         te->setFocus();
     }
@@ -141,7 +151,7 @@ void MainWindow::rollBackTab()
 
 void MainWindow::documentWasModified()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     //int index = ui->tabWidget->currentIndex();
 
     if(te->document()->isModified()) {
@@ -152,7 +162,7 @@ void MainWindow::documentWasModified()
 
 bool MainWindow::warnSave()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
 
     if (te->document()->isModified()) {
         QMessageBox::StandardButton ret;
@@ -197,7 +207,7 @@ bool MainWindow::saveAs()
 
 bool MainWindow::saveFile(const QString &fileName)
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     QFile file(fileName);
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("Application"),
@@ -225,7 +235,7 @@ bool MainWindow::saveFile(const QString &fileName)
 
 void MainWindow::loadFile(const QString &fileName)
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this, tr("LightMd"),
@@ -244,7 +254,17 @@ void MainWindow::loadFile(const QString &fileName)
     QApplication::restoreOverrideCursor();
 #endif
 
-    highlighter = new MkdSyntax(te->document(), 1000);
+    highlighter = new HGMarkdownHighlighter(te->document(), 1000);
+    if(themeState==false) {
+        QString styleFilePath = ":/styles/markdown-dark.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, te);
+    }
+    else {
+        QString styleFilePath = ":/styles/markdown-light.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, te);
+    }
+    highlighter->highlightNow();
+    highlighter->parseAndHighlightNow();
     statusBar()->showMessage(tr("File loaded"), 2000);
 }
 
@@ -254,7 +274,7 @@ void MainWindow::loadFile(const QString &fileName)
  */
 QString MainWindow::selectedText()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     return te->textCursor().selectedText();
 }
 
@@ -264,7 +284,7 @@ QString MainWindow::selectedText()
  */
 void MainWindow::replaceTextBy( const QString& text )
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     QTextCursor cursor = te->textCursor();
     cursor.insertText(text);
     te->setTextCursor(cursor);
@@ -286,7 +306,7 @@ void MainWindow::on_actionBold_triggered()
 {
     const QString select_text = selectedText();
     if(select_text.isEmpty()) {
-        QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+        QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
         QTextCursor cursor = te->textCursor();
         cursor.insertText("** **");
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor); //Move between Asterisks
@@ -304,7 +324,7 @@ void MainWindow::on_actionBold_triggered()
 void MainWindow::on_actionItalic_triggered()
 {
     const QString select_text = selectedText();
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     if(select_text.isEmpty()) {
         QTextCursor cursor = te->textCursor();
         cursor.insertText("* *");
@@ -357,7 +377,7 @@ void MainWindow::on_actionImage_triggered()
 
 void MainWindow::on_actionTable_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     QTextCursor cursor = te->textCursor();
     TableDialog tbd;
     int resultCode = tbd.exec();
@@ -396,7 +416,7 @@ void MainWindow::on_actionTable_triggered()
  */
 void MainWindow::on_actionCode_Block_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     QTextCursor cursor = te->textCursor();
     cursor.insertText(QString("\n```language\n```"));
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
@@ -409,7 +429,7 @@ void MainWindow::on_actionCode_Block_triggered()
  */
 void MainWindow::on_actionBlockquote_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     const QString select_text = selectedText();
     if(select_text.isEmpty()) {
         QTextCursor cursor = te->textCursor();
@@ -431,9 +451,8 @@ void MainWindow::on_noarg()
  */
 void MainWindow::on_actionNew_triggered()
 {
-    QTextEdit *textEdit_field = new QTextEdit();
+    QPlainTextEdit *textEdit_field = new QPlainTextEdit();
     QFont font = QFont (fontFamily);
-
     font.setPointSize(fontSize);
     font.setBold(fontIsBold);
     font.setItalic(fontIsItalic);
@@ -442,7 +461,17 @@ void MainWindow::on_actionNew_triggered()
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->setCurrentWidget(textEdit_field);
     textEdit_field->setFocus();
-    highlighter = new MkdSyntax(textEdit_field->document(), 1000);
+    highlighter = new HGMarkdownHighlighter(textEdit_field->document());
+    if(themeState==false) {
+        QString styleFilePath = ":/styles/markdown-dark.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, textEdit_field);
+    }
+    else {
+        QString styleFilePath = ":/styles/markdown-light.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, textEdit_field);
+    }
+    highlighter->highlightNow();
+    highlighter->parseAndHighlightNow();
     on_actionFocus_Mode_triggered(); //if user opens new tab then set Focus mode on new tab as well.
     connect(textEdit_field->document(), SIGNAL(contentsChanged()),
             this, SLOT(documentWasModified()),Qt::UniqueConnection);
@@ -455,7 +484,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_argOpenFile(const QString &fileName)
 {
-    QTextEdit *textEdit_field = new QTextEdit();
+    QPlainTextEdit *textEdit_field = new QPlainTextEdit();
     QFont font = QFont(fontFamily);
     font.setPointSize(fontSize);
     font.setBold(fontIsBold);
@@ -478,7 +507,7 @@ void MainWindow::on_actionOpen_triggered()
 {
 
         QString fileName = QFileDialog::getOpenFileName(this);
-        QTextEdit *textEdit_field = new QTextEdit();
+        QPlainTextEdit *textEdit_field = new QPlainTextEdit();
         QFont font = QFont(fontFamily);
         font.setPointSize(fontSize);
         font.setBold(fontIsBold);
@@ -508,7 +537,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionFont_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     te->setFont(QFontDialog::getFont(0, te->font()));
     writeSettings();
     readSettings();
@@ -516,7 +545,7 @@ void MainWindow::on_actionFont_triggered()
 
 void MainWindow::on_actionWordWrap_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     if(ui->actionWordWrap->isChecked()) {
         te->setWordWrapMode(QTextOption::WordWrap);
     }
@@ -527,7 +556,7 @@ void MainWindow::on_actionWordWrap_triggered()
 
 void MainWindow::on_actionFind_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     m_findDialog = new FindDialog();
     QPalette dark;
     dark.setColor(QPalette::Text, Qt::white);
@@ -539,11 +568,11 @@ void MainWindow::on_actionFind_triggered()
 
 void MainWindow::on_actionFind_Replace_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     m_findReplaceDialog = new FindReplaceDialog();
     m_findReplaceDialog->setStyleSheet("FindReplaceDialog {background:#302F2F; color:#FFFFFF;} QLabel {color:#FFFFFF; } QGroupBox {color:#FFFFFF;} QRadioButton, QCheckBox{background:#302F2F; color:#FFFFFF; font:bold;} QRadioButton:hover, QCheckBox:hover{background:#2D81FF; color:#000000; font:bold;}");
     m_findReplaceDialog->setModal(false);
-    m_findReplaceDialog->setTextEdit(te);
+    m_findDialog->setTextEdit(te);
     m_findReplaceDialog->show();
 }
 
@@ -571,7 +600,7 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
 
 void MainWindow::on_actionFocus_Mode_triggered()
 {
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     if(ui->actionFocus_Mode->isChecked()){
         connect(te, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     }
@@ -584,10 +613,16 @@ void MainWindow::on_actionFocus_Mode_triggered()
 
 void MainWindow::highlightCurrentLine() {
 
-    QTextEdit *te = qobject_cast<QTextEdit*>(ui->tabWidget->currentWidget());
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     QList<QTextEdit::ExtraSelection> extraSelections;
     QTextEdit::ExtraSelection selection;
-    QColor lineColor = QColor(Qt::black).lighter(160);
+    QColor lineColor;
+    if(themeState==false) {
+        lineColor = QColor(Qt::black).lighter(160);
+    }
+    else {
+        lineColor = QColor(238,232,213);
+    }
     QTextCharFormat format;
 
     format.setBackground(lineColor);
@@ -617,3 +652,81 @@ void MainWindow::on_actionContact_triggered()
 /**
  * Toolbar operations End
  */
+
+void MainWindow::on_switchTheme(const QString &themeName)
+{
+    QString image_path = ":/images/theme_"+themeName+"/";
+
+    QAction *act_1 = qobject_cast<QAction*>(ui->actionBold);
+    QAction *act_2 = qobject_cast<QAction*>(ui->actionItalic);
+    QAction *act_3 = qobject_cast<QAction*>(ui->actionAnchor_Link);
+    QAction *act_4 = qobject_cast<QAction*>(ui->actionBlockquote);
+    QAction *act_5 = qobject_cast<QAction*>(ui->actionCode_Block);
+    QAction *act_6 = qobject_cast<QAction*>(ui->actionImage);
+    QAction *act_7 = qobject_cast<QAction*>(ui->actionTable);
+    act_1->setIcon(QIcon(image_path+"bold.png"));
+    act_2->setIcon(QIcon(image_path+"italic.png"));
+    act_3->setIcon(QIcon(image_path+"link.png"));
+    act_4->setIcon(QIcon(image_path+"blockquote.png"));
+    act_5->setIcon(QIcon(image_path+"codeblock.png"));
+    act_6->setIcon(QIcon(image_path+"image.png"));
+    act_7->setIcon(QIcon(image_path+"table.png"));
+
+    QAction *act_8 = qobject_cast<QAction*>(ui->actionCut);
+    QAction *act_9 = qobject_cast<QAction*>(ui->actionCopy);
+    QAction *act_10 = qobject_cast<QAction*>(ui->actionPaste);
+    act_8->setIcon(QIcon(image_path+"cut.png"));
+    act_9->setIcon(QIcon(image_path+"copy.png"));
+    act_10->setIcon(QIcon(image_path+"paste.png"));
+
+    QAction *act_11 = qobject_cast<QAction*>(ui->actionNew);
+    QAction *act_12 = qobject_cast<QAction*>(ui->actionOpen);
+    QAction *act_13 = qobject_cast<QAction*>(ui->actionSave);
+    act_11->setIcon(QIcon(image_path+"new.png"));
+    act_12->setIcon(QIcon(image_path+"edit.png"));
+    act_13->setIcon(QIcon(image_path+"save.png"));
+
+    QAction *act_14 = qobject_cast<QAction*>(ui->actionFind);
+    QAction *act_15 = qobject_cast<QAction*>(ui->actionFind_Replace);
+    QAction *act_16 = qobject_cast<QAction*>(ui->actionFont);
+    act_14->setIcon(QIcon(image_path+"find.png"));
+    act_15->setIcon(QIcon(image_path+"findreplace.png"));
+    act_16->setIcon(QIcon(image_path+"font.png"));
+
+}
+
+void MainWindow::on_actionTheme_Toggle_triggered()
+{
+    QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
+    qDebug() << themeState;
+    if(themeState==true)
+    {
+        themeSettingsSave = "dark";
+        on_switchTheme("dark"); //ThemeName dark means light icons will be set
+        QFile styleFile_dark(":/styles/dark.qss");
+        styleFile_dark.open(QFile::ReadOnly);
+        QString style(styleFile_dark.readAll());
+        styleFile_dark.close();
+        QString styleFilePath = ":/styles/markdown-dark.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, te);
+        highlighter->highlightNow();
+        highlighter->parseAndHighlightNow();
+        this->setStyleSheet(style);
+        themeState=false;
+    }
+    else
+    {
+        themeSettingsSave = "light";
+        on_switchTheme("light"); //ThemeName light means dark icons will be set
+        QFile styleFile_light(":/styles/light.qss");
+        styleFile_light.open(QFile::ReadOnly);
+        QString style(styleFile_light.readAll());
+        styleFile_light.close();
+        QString styleFilePath = ":/styles/markdown-light.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, te);
+        highlighter->highlightNow();
+        highlighter->parseAndHighlightNow();
+        this->setStyleSheet(style);
+        themeState=true;
+    }
+}

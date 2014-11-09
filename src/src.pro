@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     findreplace/finddialog.cpp \
     findreplace/findform.cpp \
     findreplace/findreplacedialog.cpp \
-    findreplace/findreplaceform.cpp
+    findreplace/findreplaceform.cpp \
+    pmh_styleparser.c
 
 HEADERS  += mainwindow.h \
             pmh_parser.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     findreplace/findform.h \
     findreplace/findreplacedialog.h \
     findreplace/findreplaceform.h \
-    findreplace/findreplace_global.h
+    findreplace/findreplace_global.h \
+    pmh_styleparser.h
 
 FORMS    += mainwindow.ui \
     findreplace/findreplacedialog.ui \
@@ -63,6 +65,3 @@ macx {
 else:win32 {
     RC_FILE = win32/lmd.rc
 }
-
-SUBDIRS += \
-    libdialog/dialogs.pro

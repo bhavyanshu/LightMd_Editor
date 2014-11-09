@@ -1,7 +1,3 @@
-/* Copyright 2014 Bhavyanshu Parasher
- * This file is part of "LightMd Editor". See COPYING for more info
- */
-
 /* PEG Markdown Highlight
  * Copyright 2011 Ali Rantakari -- http://hasseg.org
  * Licensed under the GPL2+ and MIT licenses (see LICENSE for more info).

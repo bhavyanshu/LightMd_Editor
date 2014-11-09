@@ -572,7 +572,7 @@ void MainWindow::on_actionFind_Replace_triggered()
     m_findReplaceDialog = new FindReplaceDialog();
     m_findReplaceDialog->setStyleSheet("FindReplaceDialog {background:#302F2F; color:#FFFFFF;} QLabel {color:#FFFFFF; } QGroupBox {color:#FFFFFF;} QRadioButton, QCheckBox{background:#302F2F; color:#FFFFFF; font:bold;} QRadioButton:hover, QCheckBox:hover{background:#2D81FF; color:#000000; font:bold;}");
     m_findReplaceDialog->setModal(false);
-    m_findDialog->setTextEdit(te);
+    m_findReplaceDialog->setTextEdit(te);
     m_findReplaceDialog->show();
 }
 

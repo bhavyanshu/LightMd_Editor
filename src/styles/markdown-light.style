@@ -1,0 +1,66 @@
+H1
+foreground: 6c71c4 # violet
+font-style: bold
+
+H2
+foreground: 268BD2 # Type Blue -> RGB(38,139,210)
+font-style: bold
+
+H3
+foreground: 268BD2 # Type Blue -> RGB(38,139,210)
+
+H4
+foreground: 268BD2 # Type Blue -> RGB(38,139,210)
+
+H5
+foreground: 268BD2 # Type Blue -> RGB(38,139,210)
+
+H6
+foreground: 268BD2 # Type Blue -> RGB(38,139,210)
+
+HRULE
+foreground: 2F3C40 # Type DarkBlue -> RGB(47,60,64)
+
+LIST_BULLET
+foreground: 35BA00 # Type Green -> RGB(53,186,0)
+
+LIST_ENUMERATOR
+foreground: 35BA00 # Type Green -> RGB(53,186,0)
+
+LINK
+foreground: 5A46D6 # Type Violet -> RGB(90,70,214)
+
+AUTO_LINK_URL
+foreground: 5A46D6 # Type Violet -> RGB(90,70,214)
+
+AUTO_LINK_EMAIL
+foreground: 5A46D6 # Type Violet -> RGB(90,70,214)
+
+IMAGE
+foreground: 5A46D6 # Type Violet -> RGB(90,70,214)
+
+REFERENCE
+foreground: 5A46D6 # Type Violet -> RGB(90,70,214)
+
+CODE
+foreground: F24568 # Type Pink -> RGB(242,69,104)
+
+EMPH
+foreground: CB4B16 # Type Orange -> RGB(203,75,22)
+font-style: italic
+
+STRONG
+foreground: DC322F # Type Red -> RGB(220,50,47)
+font-style: bold
+
+HTML_ENTITY
+foreground: 6C71C4 # Type Violet -> RGB(108,113,196)
+
+COMMENT
+foreground: 768181 # Type Gray -> RGB(118,129,129)
+
+VERBATIM
+foreground: F24568 # Type Pink -> RGB(242,69,104)
+
+BLOCKQUOTE
+foreground: D33682 # Type Pink -> RGB(211,54,130)

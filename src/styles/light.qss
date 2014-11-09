@@ -1,0 +1,167 @@
+QMenuBar
+{
+    background-color: #d9d7d7;
+    color: black;
+}
+
+QMenuBar::item
+{
+    background: transparent;
+    color:black;
+}
+
+QMenuBar::item:selected
+{
+    background: #ffc3a0;
+    border: 1px solid #3A3939;
+    color: black;
+}
+
+QMenuBar::item:pressed
+{
+    border: 1px solid #3A3939;
+    background-color: #d9d7d7;
+    color: black;
+    margin-bottom:-1px;
+    padding-bottom:1px;
+}
+
+QMenu
+{
+    border: 1px solid #3A3939;
+    color: black;
+    margin: 2px;
+    background-color:#faebd7;
+}
+
+QMenu::icon
+{
+    margin: 5px;
+}
+
+QMenu::item
+{
+    padding: 5px 30px 5px 30px;
+    margin-left: 5px;
+    border: 1px solid transparent;
+    color:black;
+    background-color:#faebd7;
+}
+
+QMenu::item:selected
+{
+    color: black;
+    background-color:#ffc3a0;
+}
+
+QToolBar {
+    border: 1px solid #393838;
+    background: #d9d7d7;
+    font-weight: bold;
+}
+
+QToolBar::handle:horizontal {
+    image: url(:images/theme_dark/theme_dark/Hmovetoolbar.png);
+}
+QToolBar::handle:vertical {
+    image: url(:images/theme_dark/theme_dark/Vmovetoolbar.png);
+}
+QToolBar::separator:horizontal {
+    image: url(:images/theme_dark/theme_dark/Hsepartoolbar.png);
+}
+QToolBar::separator:vertical {
+    image: url(:images/theme_dark/Vsepartoolbars.png);
+}
+
+QToolButton#qt_toolbar_ext_button {
+    color: #FFFFFF;
+    background-color: #2D81FF;
+    border: 1px solid #302F2F;
+    image: url(:images/theme_dark/menu_expand_32.png);
+}
+QToolButton#qt_toolbar_ext_button:hover {
+    background-color:#FFFFFF;
+}
+
+
+QToolButton {
+    background-color: transparent;
+    border: 1px solid #3A3939;
+    border-radius: 3px;
+    margin: 3px;
+}
+
+QToolButton:pressed, QToolButton::menu-button:pressed {
+    background-color: #ffc3a0;
+    border: 1px solid silver;
+}
+
+QToolButton:hover, QToolButton::menu-button:hover {
+    background-color: #ffc3a0;
+    padding:2px;
+    border: 1px solid #4A4949;
+}
+
+QToolButton[popupMode="1"] { /* only for MenuButtonPopup */
+ padding-right: 20px; /* make way for the popup button */
+}
+
+QToolButton[popupMode="2"] { /* only for MenuButtonPopup */
+ padding-right: 10px; /* make way for the popup button */
+}
+
+/* the subcontrols below are used only in the MenuButtonPopup mode */
+QToolButton::menu-button {
+ border: 1px solid #3A3939;
+ border-top-right-radius: 6px;
+ border-bottom-right-radius: 6px;
+ /* 16px width + 4px for border = 20px allocated above */
+ width: 16px;
+}
+
+QToolButton::menu-arrow {
+ image: url(:images/theme_dark/down_arrow.png);
+}
+
+QToolButton::menu-arrow:open {
+ top: 1px; left: 1px; /* shift it a bit */
+}
+
+QPlainTextEdit {
+    background-color: #FDF6E3;
+    padding: 10px;
+    border-style: solid;
+    border: 1px solid #ff748c;
+    border-radius: 3px;
+}
+
+QTabBar
+{
+    qproperty-drawBase: 0;
+    padding-right: 15px;
+}
+
+QTabBar:focus
+{
+    border: 0px transparent black;
+}
+
+QTabBar::tab:top {
+    color: black;
+    background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1,
+      stop:1 #faebd7, stop:0 #faebd7);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border: 1px solid #FDF6E3;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+QStatusBar::item {
+    border: 1px solid #3A3939;
+    padding-left:10px;
+    border-radius: 3px;
+    color:black;
+}

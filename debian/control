@@ -2,8 +2,8 @@ Source: lightmdeditor
 Section: editors
 Priority: optional
 Maintainer: Bhavyanshu Parasher <ask@bhavyanshu.me>
-Build-Depends: debhelper (>= 9), qt5-default
-Standards-Version: 3.9.5
+Build-Depends: debhelper (>= 9), qtbase5-dev, qtbase5-dev-tools, qt5-qmake 
+Standards-Version: 3.9.6
 Homepage: https://github.com/bhavyanshu/lightmd_editor
 
 Package: lightmdeditor

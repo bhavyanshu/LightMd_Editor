@@ -4,12 +4,12 @@
 
 ***********************************************************************************************************
 
-### lightmdeditor (1.0-2)
+lightmdeditor (1.0-2) UNRELEASED; urgency=medium
 
-  * Minor performance tweaks
+  * Non-maintainer upload.
   * Cleaned and documented source
 
- -- Bhavyanshu <ask@bhavyanshu.me>  Fri, 07 Nov 2014 10:15:05
+ -- Bhavyanshu Parasher <ask@bhavyanshu.me>  Wed, 12 Nov 2014 15:11:49
 
 ***********************************************************************************************************
 

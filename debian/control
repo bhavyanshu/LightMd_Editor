@@ -8,7 +8,7 @@ Homepage: https://github.com/bhavyanshu/lightmd_editor
 
 Package: lightmdeditor
 Architecture: any
-Depends: libqt5gui5, libqt5widgets5, libqt5core5a, ${misc:Depends}
+Depends: libqt5gui5, libqt5widgets5, libqt5core5a, ${misc:Depends}, ${shlibs:Depends}
 Description: LightMd Editor is a markdown editor.
  LightMd Editor is a markdown editor based on Qt and C++.
  It is a feature rich markdown editor with syntax highlighting, focus

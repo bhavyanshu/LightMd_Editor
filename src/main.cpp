@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     a.setOrganizationName("Bhavyanshu Parasher");
     a.setOrganizationDomain("https://bhavyanshu.me");
     a.setApplicationName("LightMd Editor");
-    a.setApplicationVersion("1.0.1");
+    a.setApplicationVersion("1.0-2");
     MainWindow w;
     w.readSettings();
     QString theme;

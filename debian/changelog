@@ -1,11 +1,11 @@
-lightmdeditor (1.0.1) UNRELEASED; urgency=low
+lightmdeditor (1.0-1) UNRELEASED; urgency=low
 
   * Multitheme support, better syntax highlighting and fixed minor bugs
   * Changed QTextEdit to QPlainTextEdit to improve performance. Refer Qt docs. 
 
  -- Bhavyanshu Parasher <ask@bhavyanshu.me>  Sun, 09 Nov 2014 16:45:03 +0530
 
-lightmdeditor (1.0.0) UNRELEASED; urgency=low
+lightmdeditor (1.0) UNRELEASED; urgency=low
 
   * Not on debian but released on github
 

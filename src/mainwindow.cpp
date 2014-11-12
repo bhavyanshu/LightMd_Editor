@@ -48,6 +48,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/**
+ * @brief MainWindow::writeSettings - Writes settings to registry in win32 or writes to .config/LightMdEditor in *nix
+ */
 void MainWindow::writeSettings() {
 
     QSettings settings("LightMdEditor","LightMd");
@@ -64,6 +67,9 @@ void MainWindow::writeSettings() {
     }
 }
 
+/**
+ * @brief MainWindow::readSettings - Read registry settings in win32 or .config/LightMdEditor in *nix
+ */
 void MainWindow::readSettings() {
 
     QSettings settings("LightMdEditor","LightMd");
@@ -73,7 +79,10 @@ void MainWindow::readSettings() {
     fontIsItalic = settings.value("font.italic", false).toBool();
 }
 
-
+/**
+ * @brief MainWindow::themeSettings - Specific to last used theme
+ * @return QString type variable having theme.style name
+ */
 QString MainWindow::themeSettings() {
     QSettings settings("LightMdEditor","LightMd");
     themeSettingsSave = settings.value("theme.style").toString();
@@ -81,12 +90,16 @@ QString MainWindow::themeSettings() {
     return themeSettingsSave;
 }
 
+/**
+ * @brief MainWindow::closeEvent - Handles the close event properly.
+ * @param eve
+ */
 void MainWindow::closeEvent(QCloseEvent *eve)
 {
     writeSettings();
     for(int i = 0; i< ui->tabWidget->count(); i++ )
     {
-        qDebug() << ui->tabWidget->widget(i);
+        //qDebug() << ui->tabWidget->widget(i);
         QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(ui->tabWidget->widget(i));
         if(edit) {
             //edit->setText("new");
@@ -149,6 +162,9 @@ void MainWindow::rollBackTab()
         return;
 }
 
+/**
+ * @brief MainWindow::documentWasModified - Prints message to statusbar if text was modified
+ */
 void MainWindow::documentWasModified()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -159,7 +175,10 @@ void MainWindow::documentWasModified()
     }
 }
 
-
+/**
+ * @brief MainWindow::warnSave - Warns of Saving the file before quitting
+ * @return bool value
+ */
 bool MainWindow::warnSave()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -178,7 +197,10 @@ bool MainWindow::warnSave()
     return true;
 }
 
-
+/**
+ * @brief MainWindow::save - checks if saving the file first time or not
+ * @return
+ */
 bool MainWindow::save()
 {
 
@@ -191,6 +213,10 @@ bool MainWindow::save()
     }
 }
 
+/**
+ * @brief MainWindow::saveAs - Saves file for the first time
+ * @return
+ */
 bool MainWindow::saveAs()
 {
     QFileDialog dialog(this);
@@ -205,6 +231,11 @@ bool MainWindow::saveAs()
     return saveFile(files.at(0));
 }
 
+/**
+ * @brief MainWindow::saveFile - Actually saves the file
+ * @param fileName
+ * @return
+ */
 bool MainWindow::saveFile(const QString &fileName)
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -232,7 +263,10 @@ bool MainWindow::saveFile(const QString &fileName)
     return true;
 }
 
-
+/**
+ * @brief MainWindow::loadFile - Loads the file in respective QPlainTextEdit
+ * @param fileName
+ */
 void MainWindow::loadFile(const QString &fileName)
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -375,6 +409,9 @@ void MainWindow::on_actionImage_triggered()
     insertAtCursor(QString("![%1](%2 \"%1\")").arg(title).arg(url));
 }
 
+/**
+ * @brief MainWindow::on_actionTable_triggered - Generates table syntax for markdown
+ */
 void MainWindow::on_actionTable_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -386,8 +423,8 @@ void MainWindow::on_actionTable_triggered()
         int i,j=0;
         const int rows = tbd.lineEdit1->text().toInt();
         const int column = tbd.lineEdit2->text().toInt();
-        qDebug() << rows;
-        qDebug() << column;
+        //qDebug() << rows;
+        //qDebug() << column;
         for(i=0;i<rows;i++){
             for(j=0;j<column;j++){
                 if(i==1){
@@ -441,6 +478,33 @@ void MainWindow::on_actionBlockquote_triggered()
     }
 }
 
+/**
+ * @brief MainWindow::on_argOpenFile - Called when there are no command line arguments passed. Ex.- ~$ LightMdEditor filename.md
+ * @param fileName - Pass the argument which is the name of the markdown file.
+ */
+void MainWindow::on_argOpenFile(const QString &fileName)
+{
+    QPlainTextEdit *textEdit_field = new QPlainTextEdit();
+    QFont font = QFont(fontFamily);
+    font.setPointSize(fontSize);
+    font.setBold(fontIsBold);
+    font.setItalic(fontIsItalic);
+    textEdit_field->setFont(font);
+    if (!fileName.isEmpty()) {
+        ui->tabWidget->addTab(textEdit_field,fileName);
+        ui->tabWidget->setTabsClosable(true);
+        ui->tabWidget->setCurrentWidget(textEdit_field);
+        textEdit_field->setFocus();
+        loadFile(fileName);
+    }
+    on_actionFocus_Mode_triggered();
+    connect(textEdit_field->document(), SIGNAL(contentsChanged()),
+            this, SLOT(documentWasModified()),Qt::UniqueConnection);
+}
+
+/**
+ * @brief MainWindow::on_noarg - Called when there are no command line arguments passed. Ex.- ~$ LightMdEditor
+ */
 void MainWindow::on_noarg()
 {
     on_actionNew_triggered();
@@ -482,27 +546,6 @@ void MainWindow::on_actionSave_triggered()
     save();
 }
 
-void MainWindow::on_argOpenFile(const QString &fileName)
-{
-    QPlainTextEdit *textEdit_field = new QPlainTextEdit();
-    QFont font = QFont(fontFamily);
-    font.setPointSize(fontSize);
-    font.setBold(fontIsBold);
-    font.setItalic(fontIsItalic);
-    textEdit_field->setFont(font);
-    if (!fileName.isEmpty()) {
-        ui->tabWidget->addTab(textEdit_field,fileName);
-        ui->tabWidget->setTabsClosable(true);
-        ui->tabWidget->setCurrentWidget(textEdit_field);
-        textEdit_field->setFocus();
-        loadFile(fileName);
-    }
-    on_actionFocus_Mode_triggered();
-    connect(textEdit_field->document(), SIGNAL(contentsChanged()),
-            this, SLOT(documentWasModified()),Qt::UniqueConnection);
-}
-
-
 void MainWindow::on_actionOpen_triggered()
 {
 
@@ -534,7 +577,9 @@ void MainWindow::on_actionExit_triggered()
     QApplication::quit();
 }
 
-
+/**
+ * @brief MainWindow::on_actionFont_triggered - Helper dialog to change font. Reads all sys fonts.
+ */
 void MainWindow::on_actionFont_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -543,6 +588,9 @@ void MainWindow::on_actionFont_triggered()
     readSettings();
 }
 
+/**
+ * @brief MainWindow::on_actionWordWrap_triggered - Enable/Disable word wrap
+ */
 void MainWindow::on_actionWordWrap_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -553,7 +601,9 @@ void MainWindow::on_actionWordWrap_triggered()
         te->setWordWrapMode(QTextOption::NoWrap);
 }
 
-
+/**
+ * @brief MainWindow::on_actionFind_triggered - Find dialog to search for text
+ */
 void MainWindow::on_actionFind_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -566,6 +616,9 @@ void MainWindow::on_actionFind_triggered()
     m_findDialog->show();
 }
 
+/**
+ * @brief MainWindow::on_actionFind_Replace_triggered - Find replace dialog to search and replace text
+ */
 void MainWindow::on_actionFind_Replace_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -576,7 +629,9 @@ void MainWindow::on_actionFind_Replace_triggered()
     m_findReplaceDialog->show();
 }
 
-
+/**
+ * @brief MainWindow::on_actionFull_Screen_triggered - Checks whether running app in fullscreen or not when F11 pressed
+ */
 void MainWindow::on_actionFull_Screen_triggered()
 {
     if(isFullScreen()) {
@@ -597,7 +652,9 @@ void MainWindow::keyPressEvent(QKeyEvent *e) {
   }
 }
 
-
+/**
+ * @brief MainWindow::on_actionFocus_Mode_triggered - Checks for state of focus mode
+ */
 void MainWindow::on_actionFocus_Mode_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -611,6 +668,9 @@ void MainWindow::on_actionFocus_Mode_triggered()
     }
 }
 
+/**
+ * @brief MainWindow::highlightCurrentLine - Implements focus mode by highlighting current line using cursor position
+ */
 void MainWindow::highlightCurrentLine() {
 
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
@@ -650,9 +710,9 @@ void MainWindow::on_actionContact_triggered()
 }
 
 /**
- * Toolbar operations End
+ * @brief MainWindow::on_switchTheme - Switches the icons in the toolbar depending on theme to resolve "dark over dark"/"light over light" conflict.
+ * @param themeName
  */
-
 void MainWindow::on_switchTheme(const QString &themeName)
 {
     QString image_path = ":/images/theme_"+themeName+"/";
@@ -695,10 +755,13 @@ void MainWindow::on_switchTheme(const QString &themeName)
 
 }
 
+/**
+ * @brief MainWindow::on_actionTheme_Toggle_triggered - Actual implementation of changing the theme.
+ */
 void MainWindow::on_actionTheme_Toggle_triggered()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
-    qDebug() << themeState;
+    //qDebug() << themeState;
     if(themeState==true)
     {
         themeSettingsSave = "dark";

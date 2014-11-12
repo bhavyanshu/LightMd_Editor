@@ -15,7 +15,6 @@
 #include <QApplication>
 #include <QSettings>
 #include <QIcon>
-#include <QDebug>
 
 int main(int argc, char *argv[])
 {

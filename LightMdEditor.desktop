@@ -7,5 +7,6 @@ Exec=/usr/bin/LightMdEditor %F
 Comment=Markdown Editor
 Icon=/usr/share/pixmaps/lightmdeditor.ico
 StartupNotify=false
-Encoding=UTF-8
 Categories=TextEditor;WordProcessor;Development;GTK;GNOME;
+Keywords=markdown;programming;
+GenericName=Markdown Editor

@@ -109,6 +109,8 @@ private:
     void writeSettings();
 
     QString fontFamily;
+    //QStringList filelocList;
+    QMap<int, QString> filelocMap;
     int fontSize;
     bool fontIsBold;
     bool fontIsItalic;

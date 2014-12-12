@@ -143,8 +143,29 @@ void MainWindow::slotCloseTab(int index)
     QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(ui->tabWidget->widget(index));
     if(edit) {
         if(warnSave()==true){           //Before closing tab check if document is modified, if yes then ask to save.
+            //qDebug() << filelocMap.value(index) << " Index of closing tab:" << index << "Current Index:" << ui->tabWidget->currentIndex();
+            filelocMap.remove(index);
             this->ui->tabWidget->removeTab(index);
-            rollBackTab();
+            if(index < ui->tabWidget->count()) // If closed tab is any but not the last tab in tabwidget
+            {
+                int i;
+                 for(i=index;i<=ui->tabWidget->count();i++) {
+                      //qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
+                      QString filename = filelocMap.value(i+1);
+                      filelocMap.remove(i+1);
+                      filelocMap.insert(i,filename);
+                 }
+                rollBackTab();
+            }
+            else if (index == ui->tabWidget->count()) //If closed tab is the last tab in tabwidget
+            {
+                QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
+                if(te){
+                    te->setFocus();
+                }
+                else
+                    return;
+            }
         }
     }
 }
@@ -171,7 +192,7 @@ void MainWindow::documentWasModified()
     //int index = ui->tabWidget->currentIndex();
 
     if(te->document()->isModified()) {
-        statusBar()->showMessage(tr("Document has been modified"), 2000);
+        statusBar()->showMessage(tr("Document has unsaved changes"), 2000);
     }
 }
 
@@ -209,6 +230,8 @@ bool MainWindow::save()
     if (filename.compare("Untitled.md",Qt::CaseInsensitive)==0) { //That means file has never been saved before
         return saveAs(); //Save for the first time
     } else {
+        qDebug() << filelocMap.value(index);
+        QString filename = filelocMap.value(index);
         return saveFile(filename);
     }
 }
@@ -219,7 +242,11 @@ bool MainWindow::save()
  */
 bool MainWindow::saveAs()
 {
-    QFileDialog dialog(this);
+    QFileDialog dialog(this,
+                       tr("Save File"),
+                       QDir::currentPath(),
+                       tr("Markdown (*.md)"));
+    dialog.setDefaultSuffix(".md");
     dialog.setWindowModality(Qt::WindowModal);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.exec();
@@ -257,8 +284,17 @@ bool MainWindow::saveFile(const QString &fileName)
     QApplication::restoreOverrideCursor();
 #endif
 
+    //filelocList.append(fileName);
+    QFileInfo fileInfo(file);
+    QString tabname = fileInfo.fileName();
+    if(tabname.length() > 30) {
+        tabname.truncate(30);
+        tabname += QLatin1String("..");
+    }
     int index = ui->tabWidget->currentIndex();
-    ui->tabWidget->setTabText(index,fileName);
+    filelocMap.insert(index, fileName);
+    qDebug() << filelocMap.value(index);
+    ui->tabWidget->setTabText(index,tabname);
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
 }
@@ -288,6 +324,9 @@ void MainWindow::loadFile(const QString &fileName)
     QApplication::restoreOverrideCursor();
 #endif
 
+    int index = ui->tabWidget->currentIndex();
+    filelocMap.insert(index, fileName);
+    //qDebug() << filelocMap.value(index) << "at index:" << index << "New Size:" << filelocMap.size();
     highlighter = new HGMarkdownHighlighter(te->document(), 1000);
     if(themeState==false) {
         QString styleFilePath = ":/styles/markdown-dark.style";
@@ -486,12 +525,21 @@ void MainWindow::on_argOpenFile(const QString &fileName)
 {
     QPlainTextEdit *textEdit_field = new QPlainTextEdit();
     QFont font = QFont(fontFamily);
+    QFile file(fileName);
+    QFileInfo fileInfo(file);
     font.setPointSize(fontSize);
     font.setBold(fontIsBold);
     font.setItalic(fontIsItalic);
     textEdit_field->setFont(font);
+
+    QString tabname = fileInfo.fileName();
+    if(tabname.length() > 30) {
+        tabname.truncate(30);
+        tabname += QLatin1String("..");
+    }
+
     if (!fileName.isEmpty()) {
-        ui->tabWidget->addTab(textEdit_field,fileName);
+        ui->tabWidget->addTab(textEdit_field,tabname);
         ui->tabWidget->setTabsClosable(true);
         ui->tabWidget->setCurrentWidget(textEdit_field);
         textEdit_field->setFocus();
@@ -517,13 +565,19 @@ void MainWindow::on_actionNew_triggered()
 {
     QPlainTextEdit *textEdit_field = new QPlainTextEdit();
     QFont font = QFont (fontFamily);
+
+    QString tabname = "Untitled.md";
+
     font.setPointSize(fontSize);
     font.setBold(fontIsBold);
     font.setItalic(fontIsItalic);
     textEdit_field->setFont(font);
-    ui->tabWidget->addTab(textEdit_field,"Untitled.md");
+    ui->tabWidget->addTab(textEdit_field,tabname);
     ui->tabWidget->setTabsClosable(true);
     ui->tabWidget->setCurrentWidget(textEdit_field);
+    int index = ui->tabWidget->currentIndex();
+    filelocMap.insert(index, tabname);
+    //qDebug() << filelocMap.value(index) << "at index:" << index;
     textEdit_field->setFocus();
     highlighter = new HGMarkdownHighlighter(textEdit_field->document());
     if(themeState==false) {
@@ -548,24 +602,56 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionOpen_triggered()
 {
+    QString fileName = QFileDialog::getOpenFileName(
+                this,
+                tr("Open Markdown File"),
+                QDir::currentPath(),
+                tr("Markdown (*.md *.markdown *.mdown *.mkdn *.mkd *.mdwn *.mdtxt *.mdtext);;All files (*.*)"));
+    QFile file(fileName);
+    QMapIterator<int, QString> ix(filelocMap); //First check if file is  already opened up in any of the tabs
+    bool propened;
+    while (ix.hasNext()) {
+         ix.next();
+         //qDebug() << "REARRANGED MAP - Key :" << ix.key() << "Value :" << ix.value() << endl;
+         if(ix.value() == fileName) {
+             propened = true; //File is pr opened, now switch to that tab
+         }
+     }
+    if(propened==false) {
+    QPlainTextEdit *textEdit_field = new QPlainTextEdit();
+    QFont font = QFont(fontFamily);
+    QFileInfo fileInfo(file);
+    font.setPointSize(fontSize);
+    font.setBold(fontIsBold);
+    font.setItalic(fontIsItalic);
+    textEdit_field->setFont(font);
 
-        QString fileName = QFileDialog::getOpenFileName(this);
-        QPlainTextEdit *textEdit_field = new QPlainTextEdit();
-        QFont font = QFont(fontFamily);
-        font.setPointSize(fontSize);
-        font.setBold(fontIsBold);
-        font.setItalic(fontIsItalic);
-        textEdit_field->setFont(font);
-        if (!fileName.isEmpty()) {
-            ui->tabWidget->addTab(textEdit_field,fileName);
-            ui->tabWidget->setTabsClosable(true);
-            ui->tabWidget->setCurrentWidget(textEdit_field);
-            textEdit_field->setFocus();
-            loadFile(fileName);
+    QString tabname = fileInfo.fileName();
+    if(tabname.length() > 30) {
+        tabname.truncate(30);
+        tabname += QLatin1String("..");
+    }
+    if (!fileName.isEmpty()) {
+        ui->tabWidget->addTab(textEdit_field,tabname);
+        ui->tabWidget->setTabsClosable(true);
+        ui->tabWidget->setCurrentWidget(textEdit_field);
+        textEdit_field->setFocus();
+        loadFile(fileName);
+    }
+    on_actionFocus_Mode_triggered();
+    connect(textEdit_field->document(), SIGNAL(contentsChanged()),
+            this, SLOT(documentWasModified()),Qt::UniqueConnection);
+    }
+    else {
+        int index;
+        index = filelocMap.key(fileName);
+        QPlainTextEdit* edit = qobject_cast<QPlainTextEdit*>(ui->tabWidget->widget(index));
+        ui->tabWidget->setCurrentIndex(index);
+        statusBar()->showMessage(tr("File is already open"), 2000);
+        if(edit) {
+            edit->setFocus();
         }
-        on_actionFocus_Mode_triggered();
-        connect(textEdit_field->document(), SIGNAL(contentsChanged()),
-                this, SLOT(documentWasModified()),Qt::UniqueConnection);
+    }
 }
 
 

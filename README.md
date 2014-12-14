@@ -62,8 +62,3 @@ Contact me at bhavyanshu@codershangout.org or visit https://bhavyanshu.me
 
 * [PEG Markdown Highlight](http://hasseg.org/peg-markdown-highlight/)
 * [QtFindReplaceDialog](http://qtfindreplace.sourceforge.net/)
-
-
-###Attribution
-
-* Attibuting gentleface.com [Icons](http://www.gentleface.com/free_icon_set.html) - Licensed under Creative Commons Attribution-NonCommercial.

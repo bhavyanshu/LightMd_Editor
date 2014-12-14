@@ -61,23 +61,22 @@ QToolBar {
 }
 
 QToolBar::handle:horizontal {
-    image: url(:images/theme_dark/theme_dark/Hmovetoolbar.png);
+    image: url(:images/common/movehorizontal-toolbar.png);
 }
 QToolBar::handle:vertical {
-    image: url(:images/theme_dark/theme_dark/Vmovetoolbar.png);
+    image: url(:images/common/movevertical-toolbar.png);
 }
 QToolBar::separator:horizontal {
-    image: url(:images/theme_dark/theme_dark/Hsepartoolbar.png);
+    image: url(:images/common/horizontalseperator-toolbar.png);
 }
 QToolBar::separator:vertical {
-    image: url(:images/theme_dark/Vsepartoolbars.png);
+    image: url(:images/common/verticalseperator-toolbar.png);
 }
 
 QToolButton#qt_toolbar_ext_button {
     color: #FFFFFF;
     background-color: #2D81FF;
     border: 1px solid #302F2F;
-    image: url(:images/theme_dark/menu_expand_32.png);
 }
 QToolButton#qt_toolbar_ext_button:hover {
     background-color:#FFFFFF;
@@ -120,7 +119,7 @@ QToolButton::menu-button {
 }
 
 QToolButton::menu-arrow {
- image: url(:images/theme_dark/down_arrow.png);
+ image: url(:images/common/down_arrow.png);
 }
 
 QToolButton::menu-arrow:open {
@@ -157,6 +156,23 @@ QTabBar::tab:top {
     border: 1px solid #FDF6E3;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
+}
+
+QTabBar::close-button  {
+    image: url(:images/common/close.png);
+    background: transparent;
+    icon-size: 10px;
+    padding: 5px;
+}
+
+QTabBar::close-button:hover
+{
+    background: rgba(55, 55, 55, 20);
+    border-radius: 3px;
+}
+
+QTabBar::close-button:pressed {
+    padding: 5px 4px 4px 5px;
 }
 
 QStatusBar::item {

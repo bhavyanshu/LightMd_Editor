@@ -16,6 +16,7 @@ View the [releases](https://github.com/bhavyanshu/LightMd_Editor/releases) for i
 
 * Markdown formatting with keyboard shortcuts
 * Syntax Highlight for Markdown
+* Multi-tab support
 * Customizable for comfort
 * Focus Mode and Full Screen Mode for distraction free typing
 * Mutli-theme support

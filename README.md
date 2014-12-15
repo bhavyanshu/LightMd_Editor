@@ -3,10 +3,10 @@
 LightMd Markdown Editor is a free and open source editor for Markdown with lot of features. It has been tested on Linux as well as Windows. In near future, support for Mac OS will be added. 
 
 #### Current Version 
-Version Number: [1.0-2](https://github.com/bhavyanshu/LightMd_Editor/releases/tag/v1.0-2)   
+Version Number: [1.0-3](https://github.com/bhavyanshu/LightMd_Editor/releases/tag/v1.0-3)   
 Dated : 09-11-2014    
      
-Developer Ver: [1.0-3](https://github.com/bhavyanshu/LightMd_Editor/archive/master.zip)    
+Developer Ver: [1.0-4](https://github.com/bhavyanshu/LightMd_Editor/archive/master.zip)    
 
 #### Download & Install
 

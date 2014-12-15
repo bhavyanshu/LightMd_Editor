@@ -114,24 +114,23 @@ void MainWindow::closeEvent(QCloseEvent *eve)
                 int ret = msgBox.exec();
 
                 switch (ret) {
-                  case QMessageBox::Save:
-                      save();                   // Save and quit
-                      on_actionExit_triggered();
-                      break;
-                  case QMessageBox::Discard:
-                      eve->accept();            // Discard edited content
-                      break;
-                  case QMessageBox::Cancel:
-                      eve->ignore();            // Cancel was clicked, do nothing
-                      break;
-                  default:
-                      // should never be reached
-                      break;
+                case QMessageBox::Save:
+                    save();                   // Save and quit
+                    on_actionExit_triggered();
+                    break;
+                case QMessageBox::Discard:
+                    eve->accept();            // Discard edited content
+                    break;
+                case QMessageBox::Cancel:
+                    eve->ignore();            // Cancel was clicked, do nothing
+                    break;
+                default:
+                    // should never be reached
+                    break;
                 }
             }
         }
     }
-
 }
 
 /**
@@ -149,12 +148,12 @@ void MainWindow::slotCloseTab(int index)
             if(index < ui->tabWidget->count()) // If closed tab is any but not the last tab in tabwidget
             {
                 int i;
-                 for(i=index;i<=ui->tabWidget->count();i++) {
-                      //qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
-                      QString filename = filelocMap.value(i+1);
-                      filelocMap.remove(i+1);
-                      filelocMap.insert(i,filename);
-                 }
+                for(i=index;i<=ui->tabWidget->count();i++) {
+                    //qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
+                    QString filename = filelocMap.value(i+1);
+                    filelocMap.remove(i+1);
+                    filelocMap.insert(i,filename);
+                }
                 rollBackTab();
             }
             else if (index == ui->tabWidget->count()) //If closed tab is the last tab in tabwidget
@@ -162,7 +161,7 @@ void MainWindow::slotCloseTab(int index)
                 QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
                 if(te){
                     te->setFocus();
-		    filelocMap.remove(index);
+                    filelocMap.remove(index);
                 }
                 else
                     return;
@@ -208,9 +207,9 @@ bool MainWindow::warnSave()
     if (te->document()->isModified()) {
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this, tr("Save File"),
-                     tr("The document has been modified.\n"
-                        "Do you want to save your changes?"),
-                     QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+                                   tr("The document has been modified.\n"
+                                      "Do you want to save your changes?"),
+                                   QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
         if (ret == QMessageBox::Save)
             return save();
         else if (ret == QMessageBox::Cancel)
@@ -519,8 +518,8 @@ void MainWindow::on_actionBlockquote_triggered()
 }
 
 /**
- * @brief MainWindow::on_argOpenFile - Called when there are no command line arguments passed. Ex.- ~$ LightMdEditor filename.md
- * @param fileName - Pass the argument which is the name of the markdown file.
+ * @brief MainWindow::on_argOpenFile - Called when there are command line arguments passed. Ex.- ~$ LightMdEditor filename.md
+ * @param fileName - The name of the markdown file.
  */
 void MainWindow::on_argOpenFile(const QString &fileName)
 {
@@ -612,37 +611,37 @@ void MainWindow::on_actionOpen_triggered()
     QMapIterator<int, QString> ix(filelocMap); //First check if file is  already opened up in any of the tabs
     bool propened=false; //we will just assume that it's not opened
     while (ix.hasNext()) {
-         ix.next();
-         if(ix.value() == fileName) {
-	     //qDebug() << "Value :" << ix.value() << "File is open" << fileName;
-             propened = true; //File is pr opened, now switch to that tab
-	     break; //we don't wanna check the whole QMap and waste time.
-         }
-     }
+        ix.next();
+        if(ix.value() == fileName) {
+            //qDebug() << "Value :" << ix.value() << "File is open" << fileName;
+            propened = true; //File is pr opened, now switch to that tab
+            break; //we don't wanna check the whole QMap and waste time.
+        }
+    }
     if(propened==false) {
-    QPlainTextEdit *textEdit_field = new QPlainTextEdit();
-    QFont font = QFont(fontFamily);
-    QFileInfo fileInfo(file);
-    font.setPointSize(fontSize);
-    font.setBold(fontIsBold);
-    font.setItalic(fontIsItalic);
-    textEdit_field->setFont(font);
+        QPlainTextEdit *textEdit_field = new QPlainTextEdit();
+        QFont font = QFont(fontFamily);
+        QFileInfo fileInfo(file);
+        font.setPointSize(fontSize);
+        font.setBold(fontIsBold);
+        font.setItalic(fontIsItalic);
+        textEdit_field->setFont(font);
 
-    QString tabname = fileInfo.fileName();
-    if(tabname.length() > 30) {
-        tabname.truncate(30);
-        tabname += QLatin1String("..");
-    }
-    if (!fileName.isEmpty()) {
-        ui->tabWidget->addTab(textEdit_field,tabname);
-        ui->tabWidget->setTabsClosable(true);
-        ui->tabWidget->setCurrentWidget(textEdit_field);
-        textEdit_field->setFocus();
-        loadFile(fileName);
-    }
-    on_actionFocus_Mode_triggered();
-    connect(textEdit_field->document(), SIGNAL(contentsChanged()),
-            this, SLOT(documentWasModified()),Qt::UniqueConnection);
+        QString tabname = fileInfo.fileName();
+        if(tabname.length() > 30) {
+            tabname.truncate(30);
+            tabname += QLatin1String("..");
+        }
+        if (!fileName.isEmpty()) {
+            ui->tabWidget->addTab(textEdit_field,tabname);
+            ui->tabWidget->setTabsClosable(true);
+            ui->tabWidget->setCurrentWidget(textEdit_field);
+            textEdit_field->setFocus();
+            loadFile(fileName);
+        }
+        on_actionFocus_Mode_triggered();
+        connect(textEdit_field->document(), SIGNAL(contentsChanged()),
+                this, SLOT(documentWasModified()),Qt::UniqueConnection);
     }
     else {
         int index;
@@ -726,18 +725,18 @@ void MainWindow::on_actionFull_Screen_triggered()
         this->setWindowState(Qt::WindowMaximized);
     }
     else if(!isFullScreen()) {
-       this->setWindowState(Qt::WindowFullScreen);
+        this->setWindowState(Qt::WindowFullScreen);
     }
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e) {
-  QWidget::keyPressEvent(e);
-  if((e->key() == Qt::Key_F11 || e->key() == Qt::Key_Escape)  && isFullScreen()) { //Press Esc or F11 to exit
-      this->setWindowState(Qt::WindowMaximized);
-  }
-  else if(e->key() == Qt::Key_F11 && !isFullScreen()) {
-     this->setWindowState(Qt::WindowFullScreen);
-  }
+    QWidget::keyPressEvent(e);
+    if((e->key() == Qt::Key_F11 || e->key() == Qt::Key_Escape)  && isFullScreen()) { //Press Esc or F11 to exit
+        this->setWindowState(Qt::WindowMaximized);
+    }
+    else if(e->key() == Qt::Key_F11 && !isFullScreen()) {
+        this->setWindowState(Qt::WindowFullScreen);
+    }
 }
 
 /**

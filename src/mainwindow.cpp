@@ -150,7 +150,7 @@ void MainWindow::slotCloseTab(int index)
             {
                 int i;
                  for(i=index;i<=ui->tabWidget->count();i++) {
-                      //qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
+                      qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
                       QString filename = filelocMap.value(i+1);
                       filelocMap.remove(i+1);
                       filelocMap.insert(i,filename);
@@ -162,6 +162,7 @@ void MainWindow::slotCloseTab(int index)
                 QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
                 if(te){
                     te->setFocus();
+		    filelocMap.remove(index);
                 }
                 else
                     return;
@@ -609,12 +610,14 @@ void MainWindow::on_actionOpen_triggered()
                 tr("Markdown (*.md *.markdown *.mdown *.mkdn *.mkd *.mdwn *.mdtxt *.mdtext);;All files (*.*)"));
     QFile file(fileName);
     QMapIterator<int, QString> ix(filelocMap); //First check if file is  already opened up in any of the tabs
-    bool propened;
+    bool propened=false; //we will just assume that it's not opened
     while (ix.hasNext()) {
          ix.next();
-         //qDebug() << "REARRANGED MAP - Key :" << ix.key() << "Value :" << ix.value() << endl;
+         qDebug() << "REARRANGED MAP - Key :" << ix.key() << "Value :" << ix.value() << endl;
          if(ix.value() == fileName) {
+	     //qDebug() << "Value :" << ix.value() << "File is open" << fileName;
              propened = true; //File is pr opened, now switch to that tab
+	     break; //we don't wanna check the whole QMap and waste time.
          }
      }
     if(propened==false) {

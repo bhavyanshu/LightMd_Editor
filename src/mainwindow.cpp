@@ -150,7 +150,7 @@ void MainWindow::slotCloseTab(int index)
             {
                 int i;
                  for(i=index;i<=ui->tabWidget->count();i++) {
-                      qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
+                      //qDebug() << "Map Size:" << filelocMap.size() << "Index: " << i << " Value: " << filelocMap.value(i+1);
                       QString filename = filelocMap.value(i+1);
                       filelocMap.remove(i+1);
                       filelocMap.insert(i,filename);
@@ -231,7 +231,7 @@ bool MainWindow::save()
     if (filename.compare("Untitled.md",Qt::CaseInsensitive)==0) { //That means file has never been saved before
         return saveAs(); //Save for the first time
     } else {
-        qDebug() << filelocMap.value(index);
+        //qDebug() << filelocMap.value(index);
         QString filename = filelocMap.value(index);
         return saveFile(filename);
     }
@@ -294,7 +294,7 @@ bool MainWindow::saveFile(const QString &fileName)
     }
     int index = ui->tabWidget->currentIndex();
     filelocMap.insert(index, fileName);
-    qDebug() << filelocMap.value(index);
+    //qDebug() << filelocMap.value(index);
     ui->tabWidget->setTabText(index,tabname);
     statusBar()->showMessage(tr("File saved"), 2000);
     return true;
@@ -613,7 +613,6 @@ void MainWindow::on_actionOpen_triggered()
     bool propened=false; //we will just assume that it's not opened
     while (ix.hasNext()) {
          ix.next();
-         qDebug() << "REARRANGED MAP - Key :" << ix.key() << "Value :" << ix.value() << endl;
          if(ix.value() == fileName) {
 	     //qDebug() << "Value :" << ix.value() << "File is open" << fileName;
              propened = true; //File is pr opened, now switch to that tab

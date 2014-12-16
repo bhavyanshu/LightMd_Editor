@@ -1,0 +1,2 @@
+version=3
+https://github.com/bhavyanshu/LightMd_Editor/tags .*/archive/[a-z](\d\S*)\.tar\.gz

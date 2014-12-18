@@ -45,7 +45,7 @@ This application is under GNU GPLv3. Please read the COPYING.txt file for furthe
 To contribute, simply fork, clone, patch and send pull request.
 I have built it using Qt Creator. The source code is written in C++ and Qt5. So either use Qt Creator to build the project or follow the instructions given below.
 
-Use the following commands to build. Make sure you have g++, gcc and Qt5 libraries. 
+Use the following commands to build. Make sure you have g++, gcc, openGL and Qt5 libraries. If linker gives error, please see this [resolved issue](https://github.com/bhavyanshu/LightMd_Editor/issues/8). 
 
     cd ./src
     qmake

@@ -4,7 +4,23 @@
 
 ***********************************************************************************************************
 
-lightmdeditor (1.0-2) UNRELEASED; urgency=medium
+lightmdeditor (1.0.4)
+
+  * Fix for major syntax highlighting issue (See github issues)
+
+ -- Bhavyanshu Parasher <ask@bhavyanshu.me>  Wed, 12 Aug 2015 15:53:06 +0530
+
+***********************************************************************************************************
+
+lightmdeditor (1.0.3)
+
+  * Initial release (Closes: #769317)
+
+ -- Bhavyanshu Parasher <ask@bhavyanshu.me>  Tue, 16 Dec 2014 14:43:39 +0530
+
+***********************************************************************************************************
+
+lightmdeditor (1.0-2)
 
   * Non-maintainer upload.
   * Cleaned and documented source

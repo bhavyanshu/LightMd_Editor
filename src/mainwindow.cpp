@@ -190,6 +190,17 @@ void MainWindow::documentWasModified()
 {
     QPlainTextEdit *te = qobject_cast<QPlainTextEdit*>(ui->tabWidget->currentWidget());
     //int index = ui->tabWidget->currentIndex();
+    highlighter = new HGMarkdownHighlighter(te->document(), 1000);
+    if(themeState==false) {
+        QString styleFilePath = ":/styles/markdown-dark.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, te);
+    }
+    else {
+        QString styleFilePath = ":/styles/markdown-light.style";
+        highlighter->getStylesFromStylesheet(styleFilePath, te);
+    }
+    highlighter->highlightNow();
+    highlighter->parseAndHighlightNow();
 
     if(te->document()->isModified()) {
         statusBar()->showMessage(tr("Document has unsaved changes"), 2000);

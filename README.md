@@ -3,10 +3,10 @@
 LightMd Markdown Editor is a free and open source editor for Markdown with lot of features. It has been tested on Linux as well as Windows. In near future, support for Mac OS will be added. 
 
 #### Current Version 
-Version Number: [1.0.3](https://github.com/bhavyanshu/LightMd_Editor/releases/tag/v1.0.3)   
+Version Number: [1.0.4](https://github.com/bhavyanshu/LightMd_Editor/releases/tag/v1.0.4)   
 Dated : 09-11-2014    
      
-Developer Ver: [1.0.4](https://github.com/bhavyanshu/LightMd_Editor/archive/master.zip)    
+Developer Ver: [1.0.5](https://github.com/bhavyanshu/LightMd_Editor/archive/master.zip)    
 
 #### Download & Install
 
@@ -47,9 +47,13 @@ I have built it using Qt Creator. The source code is written in C++ and Qt5. So 
 
 Use the following commands to build. Make sure you have g++, gcc, openGL and Qt5 libraries. If linker gives error, please see this [resolved issue](https://github.com/bhavyanshu/LightMd_Editor/issues/8). 
 
-    cd ./src
-    qmake
-    make -f Makefile
+First get all the Qt dependencies
+
+     $ sudo apt-get install qtbase5-dev qtbase5-dev-tools qt5-qmake
+
+    $ cd ./src
+    $ qmake -qt5
+    $ make -f Makefile
 
 This will build the application if you have all the build dependencies. Come outside the *src* folder, you will see *build* & *bin* folders. In the *bin* folder, there is an executable file for the main application.
 

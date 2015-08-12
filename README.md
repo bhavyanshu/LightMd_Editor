@@ -4,7 +4,7 @@ LightMd Markdown Editor is a free and open source editor for Markdown with lot o
 
 #### Current Version 
 Version Number: [1.0.4](https://github.com/bhavyanshu/LightMd_Editor/releases/tag/v1.0.4)   
-Dated : 09-11-2014    
+Dated : 12-08-2015          
      
 Developer Ver: [1.0.5](https://github.com/bhavyanshu/LightMd_Editor/archive/master.zip)    
 
@@ -49,7 +49,7 @@ Use the following commands to build. Make sure you have g++, gcc, openGL and Qt5
 
 First get all the Qt dependencies
 
-     $ sudo apt-get install qtbase5-dev qtbase5-dev-tools qt5-qmake
+    $ sudo apt-get install qtbase5-dev qtbase5-dev-tools qt5-qmake
 
     $ cd ./src
     $ qmake -qt5
